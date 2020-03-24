@@ -12,22 +12,27 @@ def auto_cal_generator(limit=100, op_count=1, op_type=["+"], total=100):
         up = limit
         question = ""
         for i in range(0, op_count+1):
-            num = random.randint(1,max(1,min(limit,up))) 
+            num = 0
             if i == 0:
+                num = random.randint(1,max(1,min(limit,up))) 
                 question = "%s%d" % (question, num)
                 up -= num
                 continue
-            op_i = random.randint(0,l)
-            op = op_type[op_i]
-            question = "%s%s%d" % (question, op, num)
+            op = "+"
+            if limit - up > 0:
+                op_i = random.randint(0,l)
+                op = op_type[op_i]
+            question = "%s%s" % (question, op)
             if op =="+":
+                num = random.randint(1,max(1,min(limit,up))) 
                 up -= num
             elif op == "-":
+                num = random.randint(1,max(limit-up, 1)) 
                 up += num
             else:
                 print("operator error: %s" % op)
                 sys.exit(1)
-        
+            question = "%s%d" % (question, num)
         print("%d: %s=" % (j+1, question))
 
 def main(argv=None):
