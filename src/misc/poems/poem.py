@@ -15,14 +15,15 @@ from langconv import *
 poem_path_prefix = "./data"
 poem_type_list = ["tang", "song", "yuan", "shijing"]
 traditional_data = ["tang"]
+grep_poems = ["tang", "song"]
 
 #index is a dict json str, like: '{"author":"李白", "title":"静夜思"}'
-#from python3.6, dict is an ordereddict, if your python version is before 3.6, please use collections.OrderedDict
 def get_poem(poem_type="", index_json="", count=1):
     if not poem_type:
         i = random.randint(1, len(poem_type_list))
         poem_type = poem_type_list(i) 
-    poem_path = "%s/%s" % (poem_path_prefix, poem_type.lower())
+    poem_type = poem_type.lower()
+    poem_path = "%s/%s" % (poem_path_prefix, poem_type)
 
     indexs = {}
     if poem_type in traditional_data and index_json:
@@ -31,7 +32,7 @@ def get_poem(poem_type="", index_json="", count=1):
         indexs = json.loads(index_json)
 
     file_list = []
-    if indexs:
+    if indexs and poem_type in grep_poems:
         for i in indexs:
             grep_cmd = ""
             if not i in ["content", "paragraphs"]:
@@ -72,7 +73,7 @@ def get_poem(poem_type="", index_json="", count=1):
 
     if poem_type in traditional_data:
         poem_list = convertAll(poem_list)
-    return poem_list
+    return json.dumps(poem_list, ensure_ascii=False)
 
 def is_match_str(query, original):
     if not query in original:
