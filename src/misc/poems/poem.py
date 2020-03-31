@@ -3,7 +3,11 @@
 A simple chinese poem viewer
 usg: python poem.py -t "tang" -i '{"author":"李白", "title":"静夜思"}'  -c 2
 usg: python poem.py --type="tang" --indexs='{"author":"李白", "title":"静夜思"}' --count=2
+
+poem data from https://github.com/chinese-poetry/chinese-poetry
+Chinese tranditional and simple transfer code is from: https://github.com/skydark/nstools/tree/master/zhtools
 '''
+
 import sys, getopt, random, subprocess, json, os
 from langconv import *
 
@@ -34,7 +38,6 @@ def get_poem(poem_type="", index_json="", count=1):
                 grep_cmd = "grep -rl \"\\\"%s\\\".*%s\" %s" % (i, indexs[i], poem_path)
             else:
                 grep_cmd = "grep -rl \"%s\" %s" % (indexs[i], poem_path)
-            print(grep_cmd)
             res = subprocess.run(grep_cmd, shell=True, stdout=subprocess.PIPE).stdout.decode()
             file_list = res.strip().split("\n")
             break
